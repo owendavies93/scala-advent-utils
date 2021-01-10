@@ -27,14 +27,12 @@ class CellulaAutomata
         return xMatch && yMatch
     }
 
-    override def get(x: Int, y: Int): Boolean = {
-        return if (checkBounds(x, y)) grid(y * width + x) else false
-    }
+    override def get(x: Int, y: Int) =
+        if (checkBounds(x, y)) grid(y * width + x) else false
 
-    def neighbours(x: Int, y: Int): List[(Int, Int)] = {
-        return neighbourList.map(n => (x + n._1, y + n._2))
-                            .filter(n => checkBounds(n._1, n._2))
-    }
+    def neighbours(x: Int, y: Int) =
+        neighbourList.map(n => (x + n._1, y + n._2))
+                     .filter(n => checkBounds(n._1, n._2))
 
     override def step(stepFn: (Int, Int) => Boolean): CellulaAutomata = {
         val nextGrid = ArrayBuffer.fill(height * width)(false)
