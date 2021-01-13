@@ -10,23 +10,6 @@ class CellulaAutomataSpec extends AnyFunSuite {
         "#.#"
     )
 
-    test("CellulaAutomata: checkBounds") {
-        val width = 2
-        val height = 2
-        val arr = ArrayBuffer(true, false, false, true)
-
-        assert(arr.size == width * height)
-
-        val ca = new CellulaAutomata(arr, width, height)
-
-        assert( ca.checkBounds(0 , 0))
-        assert(!ca.checkBounds(-1, 0))
-        assert( ca.checkBounds(1 , 1))
-        assert(!ca.checkBounds(4 , 1))
-
-        assert(!ca.checkBounds(width, height))
-    }
-
     test("CellulaAutomata: get") {
         val ca = CAUtils.from2DCharArray(grid, '#')
 

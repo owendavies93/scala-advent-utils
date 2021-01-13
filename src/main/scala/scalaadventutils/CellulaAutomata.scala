@@ -13,20 +13,6 @@ class CellulaAutomata
         (1, 1), (-1, 1), (1, 0), (0, 1)
     )
 
-    def checkBounds(x: Int, y: Int): Boolean = {
-        val xMatch = x match {
-            case i if 0 until width contains x => true
-            case _                             => false
-        }
-
-        val yMatch = y match {
-            case i if 0 until height contains i => true
-            case _                              => false
-        }
-
-        return xMatch && yMatch
-    }
-
     override def get(x: Int, y: Int) =
         if (checkBounds(x, y)) grid(y * width + x) else false
 

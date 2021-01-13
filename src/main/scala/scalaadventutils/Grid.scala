@@ -11,6 +11,24 @@ class Grid
     private val on  = "#"
     private val off = "."
 
+    private val nonDiagNeighbourList = List(
+        (-1, 0), (0, -1), (1, 0), (0, 1)
+    )
+
+    def checkBounds(x: Int, y: Int): Boolean = {
+        val xMatch = x match {
+            case i if 0 until width contains x => true
+            case _                             => false
+        }
+
+        val yMatch = y match {
+            case i if 0 until height contains i => true
+            case _                              => false
+        }
+
+        return xMatch && yMatch
+    }
+
     def countOn() = grid.filter(_ == true).size
 
     def get(x: Int, y: Int): Boolean = {
@@ -19,6 +37,10 @@ class Grid
 
         grid((y_ % height) * width + (x_ % width))
     }
+
+    def nonDiagNeighbours(x: Int, y: Int, wrapping: Boolean = true) =
+        nonDiagNeighbourList.map(n => (x + n._1, y + n._2))
+                            .filter(n => wrapping || checkBounds(n._1, n._2))
 
     def step(stepFn: (Int, Int) => Boolean): Grid = {
         val nextGrid = ArrayBuffer.fill(height * width)(false)
