@@ -1,7 +1,6 @@
 package scalaadventutils
 
 import scala.collection.mutable.ListBuffer
-import scala.collection.mutable.Map
 import scala.collection.mutable.Set
 
 class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {

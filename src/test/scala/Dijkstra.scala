@@ -1,7 +1,6 @@
 package scalaadventutils
 
 import org.scalatest.funsuite.AnyFunSuite
-import scala.collection.mutable.Map
 
 class DijkstraSpec extends AnyFunSuite {
 
