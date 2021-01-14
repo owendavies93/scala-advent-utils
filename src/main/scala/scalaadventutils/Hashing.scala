@@ -8,6 +8,21 @@ object Hashing {
     val digest = MessageDigest.getInstance("MD5")
     val lookup = "0123456789abcdef".toCharArray()
 
+    def findHashWithLeadingChars
+        ( x: String
+        , start: Int
+        , numChars: Int
+        , toCheck: Int): Int =
+        Stream.from(start + 1).dropWhile(i => {
+            val hash = md5AsBytes(x + i.toString)
+
+            if (numChars % 2 == 0)
+                (0 until numChars / 2).exists(hash(_) != toCheck)
+            else
+                (0 until (numChars - 1) / 2).exists(hash(_) != toCheck) ||
+                ((hash((numChars - 1) / 2) & 0xF0) != toCheck)
+        })(0)
+
     def md5AsString(x: String) =
         md5(x.getBytes).map("%02x".format(_)).mkString
 

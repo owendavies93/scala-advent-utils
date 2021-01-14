@@ -34,4 +34,22 @@ class HashingSpec extends AnyFunSuite {
 
         assert(Hashing.md5AsString(string) == Hashing.md5Multi(string, 1))
     }
+
+    test("Hashing: findHashWithLeadingChars") {
+        assertResult(3231929) {
+            Hashing.findHashWithLeadingChars("abc", 3231926, 5, 0)
+        }
+
+        assertResult(3938038) {
+            Hashing.findHashWithLeadingChars("ckczppom", 3930000, 6, 0)
+        }
+
+        assertResult(3938038) {
+            Hashing.findHashWithLeadingChars("ckczppom", 3938035, 6, 0)
+        }
+
+        assertResult(117946) {
+            Hashing.findHashWithLeadingChars("ckczppom", 1, 5, 0)
+        }
+    }
 }
