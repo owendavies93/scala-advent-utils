@@ -23,8 +23,8 @@ class CellulaAutomata
     override def step(stepFn: (Int, Int) => Boolean): CellulaAutomata = {
         val nextGrid = ArrayBuffer.fill(height * width)(false)
 
-        for (y <- 0 until width) {
-            for (x <- 0 until height) {
+        for (y <- 0 until height) {
+            for (x <- 0 until width) {
                 nextGrid(y * width + x) = stepFn(x, y)
             }
         }
