@@ -29,7 +29,7 @@ class CellulaAutomata
             }
         }
 
-        return new CellulaAutomata(nextGrid, width, height)
+        new CellulaAutomata(nextGrid, width, height)
     }
 }
 
@@ -43,6 +43,6 @@ object CAUtils {
         : CellulaAutomata = {
 
         val grid = GridUtils.from2DCharArray(arr, onChar)
-        return new CellulaAutomata(grid.grid, grid.width, grid.height)
+        new CellulaAutomata(grid.grid, grid.width, grid.height)
     }
 }
