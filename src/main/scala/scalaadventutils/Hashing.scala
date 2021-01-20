@@ -5,7 +5,6 @@ import java.security.MessageDigest
 
 object Hashing {
 
-    val digest = MessageDigest.getInstance("MD5")
     val lookup = "0123456789abcdef".toCharArray()
 
     def findHashWithLeadingChars
@@ -42,7 +41,7 @@ object Hashing {
             hash(j + 1) = lookup(x(i) & 0xf).toByte
         })
 
-        digest.digest(hash.toArray)
+        md5(hash.toArray)
     }
 
     def md5Multi(x: String, times: Int): String = {
@@ -52,5 +51,6 @@ object Hashing {
         hash.map("%02x".format(_)).mkString
     }
 
-    private def md5(x: Array[Byte]) = digest.digest(x)
+    private def md5(x: Array[Byte])
+        = MessageDigest.getInstance("MD5").digest(x)
 }
