@@ -44,4 +44,6 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
         pathFinder(start, paths, p, v)
         return paths.toList
     }
+
+    def getRootNodes = graph.keys.toSet diff graph.values.flatMap(_.keys).toSet
 }

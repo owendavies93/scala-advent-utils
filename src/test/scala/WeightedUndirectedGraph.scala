@@ -18,5 +18,13 @@ class WeightedUndirectedGraphSpec extends AnyFunSuite {
 
         val graph2 = new WeightedUndirectedGraph(g2)
         graph2.getAllPaths("l")
+
+        assertResult(Set("a")) {
+            graph.getRootNodes
+        }
+
+        assertResult(Set("l")) {
+            graph2.getRootNodes
+        }
     }
 }
