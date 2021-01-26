@@ -1,7 +1,7 @@
 package scalaadventutils
 
+import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import scala.collection.mutable.Set
 
 class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
 
@@ -11,6 +11,19 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
 
     def neighbours(n: N) = get(n).keys
 
+    def getAllConnectedComponents = {
+        @tailrec
+        def get(visited: Set[N], components: List[Set[N]]): List[Set[N]] = {
+            if (visited == keys.toSet) components
+            else {
+                val unseen = keys.toSet diff visited
+                val com = getConnectedComponent(unseen.head)
+                get(visited ++ com, components :+ com)
+            }
+        }
+        get(Set[N](), List[Set[N]]())
+    }
+
     def getAllPaths(start: N): List[List[N]] = {
         var paths = new ListBuffer[List[N]]()
 
@@ -18,7 +31,7 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
             (node: N
             , paths: ListBuffer[List[N]]
             , currentPath: ListBuffer[N]
-            , visited: Set[N]) {
+            , visited: collection.mutable.Set[N]) {
 
             val ns = neighbours(node)
             if (ns.isEmpty || ns.forall(visited.contains(_))) {
@@ -40,10 +53,13 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
         }
 
         var p = ListBuffer[N](start)
-        var v = Set[N]()
+        var v = collection.mutable.Set[N]()
         pathFinder(start, paths, p, v)
-        return paths.toList
+        paths.toList
     }
+
+    def getConnectedComponent(start: N) =
+        getAllPaths(start).flatten.distinct.toSet
 
     def getRootNodes = graph.keys.toSet diff graph.values.flatMap(_.keys).toSet
 }

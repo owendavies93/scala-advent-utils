@@ -30,7 +30,7 @@ class WeightedUndirectedGraphSpec extends AnyFunSuite {
         val g3 = Map(
             0 -> Map(2 -> 1),
             5 -> Map(6 -> 1),
-            1 -> Map(1 -> 1),
+            1 -> Map[Int, Int](),
             6 -> Map(4 -> 1, 5 -> 1),
             2 -> Map(0 -> 1, 3 -> 1, 4 -> 1),
             3 -> Map(2 -> 1, 4 -> 1),
@@ -38,6 +38,17 @@ class WeightedUndirectedGraphSpec extends AnyFunSuite {
         )
 
         val graph3 = new WeightedUndirectedGraph(g3)
-        graph3.getAllPaths(0)
+
+        assertResult(List(Set(0,2,3,4,5,6), Set(1))) {
+            graph3.getAllConnectedComponents
+        }
+
+        val g4 = Map(
+            1937 -> Map(249 -> 1),
+            249  -> Map(1937 -> 1)
+        )
+
+        val graph4 = new WeightedUndirectedGraph(g4)
+        graph4.getConnectedComponent(249)
     }
 }
