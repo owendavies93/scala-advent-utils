@@ -21,7 +21,7 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
             , visited: Set[N]) {
 
             val ns = neighbours(node)
-            if (ns.isEmpty) {
+            if (ns.isEmpty || ns.forall(visited.contains(_))) {
                 paths += currentPath.toList
                 return
             }
