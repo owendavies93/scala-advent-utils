@@ -29,7 +29,12 @@ class Grid
         return xMatch && yMatch
     }
 
-    def countOn() = grid.filter(_ == true).size
+    def countOn = grid.filter(_ == true).size
+
+    def getOn =
+        (0 until height).flatMap(y =>
+            (0 until width).map(x => (x, y))
+        ).filter(p => get(p._1, p._2))
 
     def get(x: Int, y: Int): Boolean = {
         var x_ = if (x < 0) width + x  else x
