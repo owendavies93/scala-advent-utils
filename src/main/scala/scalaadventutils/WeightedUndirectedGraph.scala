@@ -11,6 +11,19 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
 
     def neighbours(n: N) = get(n).keys
 
+    def countConnectedComponents = {
+        @tailrec
+        def count(visited: Set[N], c: Int): Int = {
+            if (visited == keys.toSet) c
+            else {
+                val unseen = keys.toSet diff visited
+                val com = getConnectedComponent(unseen.head)
+                count(visited ++ com, c + 1)
+            }
+        }
+        count(Set[N](), 0)
+    }
+
     def getAllConnectedComponents = {
         @tailrec
         def get(visited: Set[N], components: List[Set[N]]): List[Set[N]] = {
@@ -51,10 +64,28 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
 
             visited -= node
         }
+/*
+        def pathFinder
+            ( node: N
+            , paths: List[List[N]]
+            , currentPath: List[N]
+            , visited: Set[N])
+            : List[List[N]] = {
 
-        var p = ListBuffer[N](start)
-        var v = collection.mutable.Set[N]()
-        pathFinder(start, paths, p, v)
+            val ns = neighbours(node)
+
+            if (ns.isEmpty || ns.forall(visited.contains(_)))
+                paths :+ currentPath
+            else {
+                ns.filterNot(n => (visited + n).contains(n)).map(n =>
+                    pathFinder(n, paths, currentPath :+ n, visited + n)
+                )
+            }
+        }
+*/
+        pathFinder(
+            start, paths, ListBuffer[N](start), collection.mutable.Set[N]()
+        )
         paths.toList
     }
 

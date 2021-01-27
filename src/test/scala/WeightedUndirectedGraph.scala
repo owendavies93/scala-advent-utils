@@ -11,13 +11,23 @@ class WeightedUndirectedGraphSpec extends AnyFunSuite {
                     "e" -> Map("f" -> 1))
 
         val graph = new WeightedUndirectedGraph(g)
-        graph.getAllPaths("a")
+
+        assertResult(List(
+            List("a", "b", "d"),
+            List("a", "b", "c", "e", "f"),
+            List("a", "c", "e", "f")
+        )) {
+            graph.getAllPaths("a")
+        }
 
         val g2 = Map("l" -> Map("d" -> 464, "b" -> 518),
                      "d" -> Map("b" -> 141))
 
         val graph2 = new WeightedUndirectedGraph(g2)
-        graph2.getAllPaths("l")
+
+        assertResult(List(List("l", "d", "b"), List("l", "b"))) {
+            graph2.getAllPaths("l")
+        }
 
         assertResult(Set("a")) {
             graph.getRootNodes
@@ -43,12 +53,19 @@ class WeightedUndirectedGraphSpec extends AnyFunSuite {
             graph3.getAllConnectedComponents
         }
 
+        assertResult(2) {
+            graph3.countConnectedComponents
+        }
+
         val g4 = Map(
             1937 -> Map(249 -> 1),
             249  -> Map(1937 -> 1)
         )
 
         val graph4 = new WeightedUndirectedGraph(g4)
-        graph4.getConnectedComponent(249)
+
+        assertResult(1) {
+            graph4.countConnectedComponents
+        }
     }
 }
