@@ -36,6 +36,50 @@ class CircularListSpec extends AnyFunSuite {
         }
     }
 
+    test("CircularList: rotate") {
+        val cl = CircularList(4)(1, 2, 3)
+
+        val cl2 = cl.rotate
+
+        assert(cl2.size == cl.size)
+
+        assertResult(CircularList(4)(2, 3, 1)) {
+            cl2
+        }
+    }
+
+    test("CircularList: insertAt") {
+        val cl = CircularList(4)(1, 2, 3)
+
+        val cl2 = cl.insertAt(0, 10)
+
+        assert(cl2.size == 4)
+
+        assertResult(CircularList(4)(10, 1, 2, 3)) {
+            cl2
+        }
+
+        val cl3 = cl.insertAt(3, 10)
+
+        assert(cl3.size == 4)
+
+        assertResult(CircularList(4)(1, 2, 3, 10)) {
+            cl3
+        }
+
+        val cl4 = cl.insertAt(4, 10)
+
+        assert(cl4.size == 3)
+
+        val cl5 = cl3.insertAt(0, 3)
+
+        assert(cl5.size == 4)
+
+        assertResult(CircularList(4)(1, 2, 3, 10)) {
+            cl5
+        }
+    }
+
     test("CircularList: slice") {
         val cl = CircularList(4)(1, 2, 3, 4)
 

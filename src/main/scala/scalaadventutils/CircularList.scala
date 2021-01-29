@@ -16,7 +16,17 @@ case class CircularList[T](capacity: Int, size: Int, queue: Queue[T]) {
         case (head, q) => (head, CircularList(capacity, size - 1, q))
     }.getOrElse(throw new NoSuchElementException)
 
-    def reverseSection(from: Int, to: Int) =
+    def insertAt(i: Int, e: T) =
+        if (size == capacity || i > size) this
+        else CircularList(
+            capacity, size + 1, slice(0, i).enqueue(e) ++ slice(i, size))
+
+    def rotate: CircularList[T] = {
+        val (elem, cl) = pop
+        cl.push(elem)._2
+    }
+
+    def reverseSection(from: Int, to: Int): CircularList[T] =
         if (from >= to) CircularList(capacity, size, queue)
         else {
             val section = slice(from, to).reverse
