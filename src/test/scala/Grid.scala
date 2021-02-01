@@ -88,5 +88,18 @@ class GridSpec extends AnyFunSuite {
 
         assert(grid2.mkString("\n") == grid1.toString())
     }
+
+    test("GridUtils") {
+        val g  = "...#".toCharArray
+        val g1 = List[String](
+            "..",
+            ".#",
+        )
+
+        val grid  = GridUtils.from1DCharArray(g, '#')
+        val grid1 = GridUtils.from2DCharArray(g1, '#')
+
+        assert(grid.toString() == grid1.toString())
+    }
 }
 

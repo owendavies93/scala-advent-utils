@@ -1,6 +1,7 @@
 package scalaadventutils
 
 import scala.collection.mutable.ArrayBuffer
+import scala.math.sqrt
 
 class Grid
     ( val grid:   ArrayBuffer[Boolean]
@@ -80,11 +81,7 @@ object GridUtils {
 
     @throws(classOf[EmptyInputException])
     @throws(classOf[IncorrectSizeException])
-    def from2DCharArray
-        ( arr: List[String]
-        , onChar: Char)
-        : Grid = {
-
+    def from2DCharArray(arr: List[String], onChar: Char): Grid = {
         if (arr.isEmpty) {
             throw new EmptyInputException("Can't make CA from empty grid")
         }
@@ -109,9 +106,24 @@ object GridUtils {
             }
         }
 
-        return new Grid(buff, width, height)
+        new Grid(buff, width, height)
     }
 
+    /*
+        Only supports the creation of square grids
+        Could be extended to support a height and width if needed
+    */
+    @throws(classOf[EmptyInputException])
+    def from1DCharArray(arr: Array[Char], onChar: Char): Grid = {
+        if (arr.isEmpty) {
+            throw new EmptyInputException("Can't make grid from empty grid")
+        }
+
+        val dimension = sqrt(arr.size).toInt
+        val buff = arr.map(_ == onChar)
+
+        new Grid(ArrayBuffer(buff:_*), dimension, dimension)
+    }
 }
 
 final case class EmptyInputException
