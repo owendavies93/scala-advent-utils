@@ -27,7 +27,7 @@ class Grid
             case _                              => false
         }
 
-        return xMatch && yMatch
+        xMatch && yMatch
     }
 
     def countOn = grid.filter(_ == true).size
@@ -57,7 +57,7 @@ class Grid
             }
         }
 
-        return new Grid(nextGrid, width, height)
+        new Grid(nextGrid, width, height)
     }
 
     override def toString(): String = {
@@ -73,7 +73,7 @@ class Grid
             }
         }
 
-        return sb.toString()
+        sb.toString()
     }
 }
 
