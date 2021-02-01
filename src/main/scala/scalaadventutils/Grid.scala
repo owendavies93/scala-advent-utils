@@ -69,6 +69,22 @@ class Grid
         flip, flip.rotate, flip.rotate.rotate, flip.rotate.rotate.rotate
     )
 
+    /*
+        Only works correct on square Grids
+    */
+    def split(size: Int): List[Grid] =
+        if (size * size >= width * height) List(this)
+        else {
+            val groups = grid.grouped(size).zipWithIndex.toList
+
+            val partitions =
+                (0 to 1).flatMap(i => groups.filter(_._2 % 2 == i))
+                        .map(_._1).grouped(size).map(_.flatten.toArray)
+                        .toList
+
+            partitions.map(g => new Grid(ArrayBuffer(g:_*), size, size))
+        }
+
     override def equals(that: Any): Boolean = that match {
         case g: Grid => g.width == width && g.height == height && g.grid.sameElements(grid)
         case _ => false

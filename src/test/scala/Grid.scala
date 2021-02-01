@@ -120,6 +120,32 @@ class GridSpec extends AnyFunSuite {
         assert(grid.flip.equals(grid.rotate.rotate.rotate))
     }
 
+    test("Grid: split") {
+        val g = List[String](
+            "#..#",
+            "....",
+            "....",
+            "#..#"
+        )
+
+        var grid = GridUtils.from2DCharArray(g, '#')
+
+        assert(grid.split(2).size == 4)
+
+        val g2 = List[String](
+            "##.##.",
+            "#..#..",
+            "......",
+            "##.##.",
+            "#..#..",
+            "......"
+        )
+
+        var grid2 = GridUtils.from2DCharArray(g2, '#')
+
+        assert(grid2.split(3).size == 4)
+    }
+
     test("GridUtils") {
         val g  = "...#".toCharArray
         val g1 = List[String](
