@@ -75,7 +75,7 @@ class GridSpec extends AnyFunSuite {
         var grid1 = GridUtils.from2DCharArray(grid, '#')
 
         def stepFn(x: Int, y: Int): Boolean = {
-            return x <= 1 && y <= 1
+            x <= 1 && y <= 1
         }
 
         grid1 = grid1.step(stepFn)
@@ -87,6 +87,37 @@ class GridSpec extends AnyFunSuite {
         )
 
         assert(grid2.mkString("\n") == grid1.toString())
+    }
+
+    test("Grid: flip and rotate") {
+        val g = List[String](
+            "##.",
+            "##.",
+            "..#"
+        )
+
+        val flipped = List[String](
+            ".##",
+            ".##",
+            "#.."
+        )
+
+        var grid = GridUtils.from2DCharArray(g, '#')
+
+        assert(grid.flip.toString() == flipped.mkString("\n"))
+
+        val rotated = List[String](
+            "#..",
+            ".##",
+            ".##"
+        )
+
+        assert(grid.rotate.rotate.toString() == rotated.mkString("\n"))
+
+        assert(grid.transformations.size == 8)
+        assert(grid.transformations.distinct.size == 4)
+
+        assert(grid.flip.equals(grid.rotate.rotate.rotate))
     }
 
     test("GridUtils") {

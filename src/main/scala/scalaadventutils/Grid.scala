@@ -60,6 +60,22 @@ class Grid
         new Grid(nextGrid, width, height)
     }
 
+    def flip: Grid = step((x: Int, y: Int) => get(width - x - 1, y))
+
+    def rotate: Grid = step((x: Int, y: Int) => get(height - y - 1, x))
+
+    def transformations: List[Grid] = List(
+        this, rotate, rotate.rotate, rotate.rotate.rotate,
+        flip, flip.rotate, flip.rotate.rotate, flip.rotate.rotate.rotate
+    )
+
+    override def equals(that: Any): Boolean = that match {
+        case g: Grid => g.width == width && g.height == height && g.grid.sameElements(grid)
+        case _ => false
+    }
+
+    override def hashCode() = width.## * height.## * grid.toSeq.##
+
     override def toString(): String = {
         val sb = new StringBuilder
 
