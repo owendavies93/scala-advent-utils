@@ -159,6 +159,29 @@ object GridUtils {
 
         new Grid(ArrayBuffer(buff:_*), dimension, dimension)
     }
+
+    /*
+        The inverse of split. Joins in the same order as split outputs,
+        up to down. Requires all segments to be of equal size.
+    */
+    def join(segs: List[Grid]): Grid = {
+        val segDim       = segs(0).width
+        val widthInSegs  = math.sqrt(segs.size).toInt
+        val heightInSegs = segDim * widthInSegs
+
+        val groups = segs.map(_.grid).flatten.grouped(segDim)
+                         .zipWithIndex.toList
+
+        val arr = (0 until heightInSegs).flatMap(y =>
+            (0 until widthInSegs).flatMap(x =>
+                groups(x * heightInSegs + y)._1
+            )
+        ).toArray
+
+        val arrDim = math.sqrt(arr.size).toInt
+
+        new Grid(ArrayBuffer(arr:_*), arrDim, arrDim)
+    }
 }
 
 final case class EmptyInputException

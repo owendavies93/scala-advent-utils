@@ -144,9 +144,37 @@ class GridSpec extends AnyFunSuite {
         var grid2 = GridUtils.from2DCharArray(g2, '#')
 
         assert(grid2.split(3).size == 4)
+        assert(grid2.split(2).size == 9)
     }
 
-    test("GridUtils") {
+    test("GridUtils: join") {
+        val g = List[String](
+            "#..#",
+            "....",
+            "....",
+            "#..#"
+        )
+
+        var grid = GridUtils.from2DCharArray(g, '#')
+
+        assert(GridUtils.join(grid.split(2)) == grid)
+
+        val g2 = List[String](
+            "##.##.",
+            "#..#..",
+            "......",
+            "##.##.",
+            "##.#..",
+            "......"
+        )
+
+        var grid2 = GridUtils.from2DCharArray(g2, '#')
+
+        assert(GridUtils.join(grid2.split(2)) == grid2)
+        assert(GridUtils.join(grid2.split(3)) == grid2)
+    }
+
+    test("GridUtils: from Char Array") {
         val g  = "...#".toCharArray
         val g1 = List[String](
             "..",
