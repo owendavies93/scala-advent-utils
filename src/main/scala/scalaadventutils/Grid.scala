@@ -75,15 +75,18 @@ class Grid
     def split(size: Int): List[Grid] =
         if (size * size >= width * height) List(this)
         else {
+            val divisor = width / size
+
             val groups = grid.grouped(size).zipWithIndex.toList
 
-            val partitions =
-                (0 to 1).flatMap(i => groups.filter(_._2 % 2 == i))
-                        .map(_._1).grouped(size).map(_.flatten.toArray)
-                        .toList
+            val partitions = (0 to (divisor - 1))
+                .flatMap(i => groups.filter(_._2 % divisor == i))
+                .map(_._1).grouped(size).map(_.flatten.toArray)
+                .toList
 
             partitions.map(g => new Grid(ArrayBuffer(g:_*), size, size))
         }
+
 
     override def equals(that: Any): Boolean = that match {
         case g: Grid => g.width == width && g.height == height && g.grid.sameElements(grid)
