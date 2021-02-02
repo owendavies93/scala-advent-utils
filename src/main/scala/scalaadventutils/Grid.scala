@@ -81,7 +81,7 @@ class Grid
 
             val partitions = (0 to (divisor - 1))
                 .flatMap(i => groups.filter(_._2 % divisor == i))
-                .map(_._1).grouped(size).map(_.flatten.toArray)
+                .map(_._1).grouped(size).map(_.flatten)
                 .toList
 
             partitions.map(g => new Grid(ArrayBuffer(g:_*), size, size))
@@ -170,13 +170,14 @@ object GridUtils {
         val heightInSegs = segDim * widthInSegs
 
         val groups = segs.map(_.grid).flatten.grouped(segDim)
-                         .zipWithIndex.toList
+                         .toArray
 
-        val arr = (0 until heightInSegs).flatMap(y =>
-            (0 until widthInSegs).flatMap(x =>
-                groups(x * heightInSegs + y)._1
+        val arr =
+            (0 until heightInSegs).flatMap(y =>
+                (0 until widthInSegs).flatMap(x =>
+                    groups(x * heightInSegs + y)
+                )
             )
-        ).toArray
 
         val arrDim = math.sqrt(arr.size).toInt
 
