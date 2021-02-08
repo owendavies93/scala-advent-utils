@@ -31,4 +31,6 @@ object Factorise {
         })
         return (List(1, n) ++ products).sorted
     }
+
+    def isPrime(n: Int) = factors(n).size == 2
 }

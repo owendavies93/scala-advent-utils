@@ -20,4 +20,12 @@ class FactoriseSpec extends AnyFunSuite with Matchers {
             List(1, 2, 7, 14, 251, 502, 1757, 3514)
         )
     }
+
+    test("isPrime") {
+        assert(Factorise.isPrime(2))
+        assert(Factorise.isPrime(3))
+        assert(!Factorise.isPrime(4))
+        assert(!Factorise.isPrime(3514))
+        assert(Factorise.isPrime(63419))
+    }
 }
