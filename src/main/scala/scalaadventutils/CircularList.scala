@@ -43,6 +43,8 @@ case class CircularList[T](capacity: Int, size: Int, queue: Queue[T]) {
 
     def slice(from: Int, to: Int): Queue[T] = {
         if (from >= to) Queue.empty
+        else if (from >= size)
+            queue.slice(from % size, to % size)
         else if (to >= size)
             queue.slice(from, size) ++ queue.slice(0, to % size)
         else
