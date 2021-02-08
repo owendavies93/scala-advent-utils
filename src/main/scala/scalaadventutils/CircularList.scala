@@ -21,9 +21,18 @@ case class CircularList[T](capacity: Int, size: Int, queue: Queue[T]) {
         else CircularList(
             capacity, size + 1, slice(0, i).enqueue(e) ++ slice(i, size))
 
-    def rotate: CircularList[T] = {
-        val (elem, cl) = pop
-        cl.push(elem)._2
+    def removeAt(i: Int): (T, CircularList[T]) = {
+        val modIndex = if (i >= 0) i % size else i + size
+        val (e, l) = rotate(modIndex).pop
+        (e, l.rotate(l.size - modIndex))
+    }
+
+    def rotate(times: Int = 1): CircularList[T] = {
+        val t = if (times < 0) size + times else times
+        (1 to t).foldLeft(this)((cl, _) => {
+            val (elem, cl_) = cl.pop
+            cl_.push(elem)._2
+        })
     }
 
     def reverseSection(from: Int, to: Int): CircularList[T] =

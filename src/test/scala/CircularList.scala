@@ -39,12 +39,18 @@ class CircularListSpec extends AnyFunSuite {
     test("CircularList: rotate") {
         val cl = CircularList(4)(1, 2, 3)
 
-        val cl2 = cl.rotate
+        val cl2 = cl.rotate(1)
 
         assert(cl2.size == cl.size)
 
         assertResult(CircularList(4)(2, 3, 1)) {
             cl2
+        }
+
+        val cl3 = cl.rotate(-2)
+
+        assertResult(CircularList(4)(2, 3, 1)) {
+            cl3
         }
     }
 
@@ -77,6 +83,44 @@ class CircularListSpec extends AnyFunSuite {
 
         assertResult(CircularList(4)(1, 2, 3, 10)) {
             cl5
+        }
+    }
+
+    test("CircularList: removeAt") {
+        val cl = CircularList(4)(1, 2, 3)
+
+        val (e, cl2) = cl.removeAt(2)
+
+        assert(e == 3)
+
+        assertResult(CircularList(4)(1, 2)) {
+            cl2
+        }
+
+        val (e1, cl3) = cl.removeAt(4)
+
+        assert(e1 == 2)
+
+        assertResult(CircularList(4)(1, 3)) {
+            cl3
+        }
+
+        val (e2, cl4) = cl.removeAt(-2)
+
+        assert(e1 == 2)
+
+        assertResult(CircularList(4)(1, 3)) {
+            cl4
+        }
+
+        val cl5 = CircularList(6)(1,2,3,4,5,6)
+
+        val (e3, cl6) = cl5.removeAt(3)
+
+        assert(e3 == 4)
+
+        assertResult(CircularList(6)(1,2,3,5,6)) {
+            cl6
         }
     }
 
