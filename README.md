@@ -5,3 +5,4 @@ TODO
 * [ ] Reduce iteration in graph algorithms
 * [ ] Make older code more idiomatic
 * [ ] Add more tests
+* [ ] Improve CircularList performance
