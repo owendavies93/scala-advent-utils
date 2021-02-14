@@ -93,4 +93,10 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
         getAllPaths(start).flatten.distinct.toSet
 
     def getRootNodes = graph.keys.toSet diff graph.values.flatMap(_.keys).toSet
+
+    def removeEdgesTo(node: N) = new WeightedUndirectedGraph(
+        keys.map(k =>
+            k -> graph(k).-(node)
+        ).toMap
+    )
 }

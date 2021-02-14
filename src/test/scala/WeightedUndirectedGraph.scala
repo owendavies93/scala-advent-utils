@@ -67,5 +67,11 @@ class WeightedUndirectedGraphSpec extends AnyFunSuite {
         assertResult(1) {
             graph4.countConnectedComponents
         }
+
+        val graph5 = graph.removeEdgesTo("c")
+
+        assertResult(Map("b" -> 464)) {
+            graph5.get("a")
+        }
     }
 }
