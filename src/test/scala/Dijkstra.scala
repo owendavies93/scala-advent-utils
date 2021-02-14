@@ -15,6 +15,16 @@ class DijkstraSpec extends AnyFunSuite {
             val path = Dijkstra.shortestPath(graph, "a", "d")
             Dijkstra.shortestPathTotalWeight(graph, path)
         }
+
+        assertResult(474) {
+            val path = Dijkstra.shortestPath(graph, "a", "d", true)
+            Dijkstra.shortestPathTotalWeight(graph, path)
+        }
     }
 
+    test("Strongly connected tree") {
+        val tree = Dijkstra.stronglyConnectedTree(100)
+        Profiler.timeMicS { Dijkstra.dijkstra(tree, 1) }
+        Profiler.timeMicS { Dijkstra.dijkstraFast(tree, 1) }
+    }
 }

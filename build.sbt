@@ -6,5 +6,6 @@ lazy val hello = (project in file("."))
     name := "ScalaAdventUtils",
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.2",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.2" % Test,
+    libraryDependencies += "de.ummels" %% "scala-prioritymap" % "1.0.0"
   )
 
