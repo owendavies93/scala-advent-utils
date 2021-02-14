@@ -31,7 +31,7 @@ object Dijkstra {
             }
         }
 
-        return (result, pred)
+        (result, pred)
     }
 
     def shortestPath[N]
@@ -50,27 +50,14 @@ object Dijkstra {
                 }
             }
 
-            return go(x, List.empty)
+            go(x, List.empty)
         }
 
-        return right(target, pred)
+        right(target, pred)
     }
 
     def shortestPathTotalWeight[N]
         ( g: WeightedUndirectedGraph[N]
-        , path: List[N])
-        : Int = {
-
-        var total = 0
-
-        def get(i: Int) {
-            if (i < path.size - 1) {
-                total += g.get(path(i))(path(i + 1))
-                get(i + 1)
-            }
-        }
-        get(0)
-
-        return total
-    }
+        , path: List[N]) =
+            path.sliding(2).map(edge => g.get(edge(0))(edge(1))).sum
 }
