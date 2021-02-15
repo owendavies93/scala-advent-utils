@@ -155,9 +155,9 @@ object GridUtils {
         }
 
         val dimension = sqrt(arr.size).toInt
-        val buff = arr.map(_ == onChar)
+        val buff = arr.map(_ == onChar).to(ArrayBuffer)
 
-        new Grid(ArrayBuffer(buff:_*), dimension, dimension)
+        new Grid(buff, dimension, dimension)
     }
 
     /*

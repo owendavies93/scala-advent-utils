@@ -28,5 +28,5 @@ object Problem {
     def parseInputToString(res: String) = io.Source
         .fromResource(res)
         .getLines()
-        .next
+        .next()
 }

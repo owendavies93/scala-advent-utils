@@ -44,7 +44,7 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
             (node: N
             , paths: ListBuffer[List[N]]
             , currentPath: ListBuffer[N]
-            , visited: collection.mutable.Set[N]) {
+            , visited: collection.mutable.Set[N]): Unit = {
 
             val ns = neighbours(node)
             if (ns.isEmpty || ns.forall(visited.contains(_))) {
