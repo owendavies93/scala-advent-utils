@@ -3,6 +3,13 @@ package scalaadventutils
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 
+trait NodeSet[N] {
+    // Unweighted distances (nodes between)
+    def distances: Map[N, Int]
+
+    def nodes: Set[N] = distances.keySet
+}
+
 class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
 
     def get(n: N) = graph.getOrElse(n, Map.empty)
@@ -11,30 +18,44 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
 
     def neighbours(n: N) = get(n).keys
 
-    def countConnectedComponents = {
-        @tailrec
-        def count(visited: Set[N], c: Int): Int = {
-            if (visited == keys.toSet) c
+    def countConnectedComponents: Int = getAllConnectedComponents.size
+
+    def getAllConnectedComponents: Set[Set[N]] = {
+        val nodeSet = keys.toSet
+
+        def getComp(nodes: Set[N]): Set[Set[N]] = {
+            if (nodes.isEmpty) Set.empty
             else {
-                val unseen = keys.toSet diff visited
-                val com = getConnectedComponent(unseen.head)
-                count(visited ++ com, c + 1)
+                val start = nodes.head
+                val component = getConnectedComponent(start)
+                val remaining = nodes -- component
+                getComp(remaining) + component
             }
         }
-        count(Set[N](), 0)
+        getComp(nodeSet)
     }
 
-    def getAllConnectedComponents = {
+    def getConnectedComponent(start: N) = traverseFrom(start).nodes
+
+    def traverseFrom(start: N): NodeSet[N] = {
+
         @tailrec
-        def get(visited: Set[N], components: List[Set[N]]): List[Set[N]] = {
-            if (visited == keys.toSet) components
-            else {
-                val unseen = keys.toSet diff visited
-                val com = getConnectedComponent(unseen.head)
-                get(visited ++ com, components :+ com)
-            }
+        def traverse(visited: Map[N, Int], toVisit: Map[N, Int]): NodeSet[N] = {
+            val neighs = for {
+                (n, d) <- toVisit
+                neigh  <- neighbours(n)
+            } yield neigh -> (d + 1)
+
+            val nextVisited = visited ++ toVisit
+            val nextToVisit = neighs -- visited.keys
+
+            if (nextToVisit.isEmpty)
+                new NodeSet[N] { override def distances = nextVisited }
+            else
+                traverse(nextVisited, nextToVisit)
         }
-        get(Set[N](), List[Set[N]]())
+
+        traverse(Map.empty, Map(start -> 0))
     }
 
     def getAllPaths(start: N): List[List[N]] = {
@@ -88,9 +109,6 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
         )
         paths.toList
     }
-
-    def getConnectedComponent(start: N) =
-        getAllPaths(start).flatten.distinct.toSet
 
     def getRootNodes = graph.keys.toSet diff graph.values.flatMap(_.keys).toSet
 

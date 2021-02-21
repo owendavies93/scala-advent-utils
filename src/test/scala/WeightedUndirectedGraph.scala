@@ -49,7 +49,7 @@ class WeightedUndirectedGraphSpec extends AnyFunSuite {
 
         val graph3 = new WeightedUndirectedGraph(g3)
 
-        assertResult(List(Set(0,2,3,4,5,6), Set(1))) {
+        assertResult(Set(Set(0,2,3,4,5,6), Set(1))) {
             graph3.getAllConnectedComponents
         }
 
