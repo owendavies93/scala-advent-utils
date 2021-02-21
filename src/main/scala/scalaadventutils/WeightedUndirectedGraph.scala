@@ -85,25 +85,7 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
 
             visited -= node
         }
-/*
-        def pathFinder
-            ( node: N
-            , paths: List[List[N]]
-            , currentPath: List[N]
-            , visited: Set[N])
-            : List[List[N]] = {
 
-            val ns = neighbours(node)
-
-            if (ns.isEmpty || ns.forall(visited.contains(_)))
-                paths :+ currentPath
-            else {
-                ns.filterNot(n => (visited + n).contains(n)).map(n =>
-                    pathFinder(n, paths, currentPath :+ n, visited + n)
-                )
-            }
-        }
-*/
         pathFinder(
             start, paths, ListBuffer[N](start), collection.mutable.Set[N]()
         )
