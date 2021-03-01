@@ -73,5 +73,15 @@ class WeightedUndirectedGraphSpec extends AnyFunSuite {
         assertResult(Map("b" -> 464)) {
             graph5.get("a")
         }
+
+        val bfs = graph.searchFrom("a", (s: String) => s == "f")
+
+        assertResult(Some("f", 3)) {
+            bfs.to
+        }
+
+        val bfs2 = graph.searchFrom("a", (s: String) => s == "z")
+
+        assert(!bfs2.to.isDefined)
     }
 }

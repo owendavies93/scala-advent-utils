@@ -10,6 +10,10 @@ trait NodeSet[N] {
     def nodes: Set[N] = distances.keySet
 }
 
+trait To[N] {
+    def to: Option[(N, Int)]
+}
+
 class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
 
     def get(n: N) = graph.getOrElse(n, Map.empty)
@@ -40,14 +44,14 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
     def traverseFrom(start: N): NodeSet[N] = {
 
         @tailrec
-        def traverse(visited: Map[N, Int], toVisit: Map[N, Int]): NodeSet[N] = {
+        def traverse(v: Map[N, Int], toVisit: Map[N, Int]): NodeSet[N] = {
             val neighs = for {
                 (n, d) <- toVisit
                 neigh  <- neighbours(n)
             } yield neigh -> (d + 1)
 
-            val nextVisited = visited ++ toVisit
-            val nextToVisit = neighs -- visited.keys
+            val nextVisited = v ++ toVisit
+            val nextToVisit = neighs -- v.keys
 
             if (nextToVisit.isEmpty)
                 new NodeSet[N] { override def distances = nextVisited }
@@ -56,6 +60,38 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
         }
 
         traverse(Map.empty, Map(start -> 0))
+    }
+
+    def searchFrom(start: N, toF: (N => Boolean)): NodeSet[N] with To[N] = {
+
+        @tailrec
+        def search(v: Map[N, Int], tv: Map[N, Int]): NodeSet[N] with To[N] = {
+            val neighs = for {
+                (n, d) <- tv
+                neigh  <- neighbours(n)
+            } yield neigh -> (d + 1)
+
+            val nextVisited = v ++ tv
+            val found = tv.find(n => toF(n._1))
+
+            if (found.isDefined) {
+                new NodeSet[N] with To[N] {
+                    override def distances = nextVisited
+                    override def to = found
+                }
+            } else {
+                val nextToVisit = neighs -- v.keys
+
+                if (nextToVisit.isEmpty)
+                    new NodeSet[N] with To[N] {
+                        override def distances = nextVisited
+                        override def to = None
+                    }
+                else search(nextVisited, nextToVisit)
+            }
+        }
+
+        search(Map.empty, Map(start -> 0))
     }
 
     def getAllPaths(start: N): List[List[N]] = {
