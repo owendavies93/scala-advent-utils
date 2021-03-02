@@ -2,6 +2,7 @@ package scalaadventutils
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.PriorityQueue
 
 trait NodeSet[N] {
     // Unweighted distances (nodes between)
@@ -92,6 +93,49 @@ class WeightedUndirectedGraph[N](graph: Map[N, Map[N, Int]]) {
         }
 
         search(Map.empty, Map(start -> 0))
+    }
+
+    // This is basically the code from Dijkstra but adapted to use dynamic
+    // neighbour calculations instead of having to precompute the entire
+    // distance map
+    // Also, return the path distance in one go instead of returning the
+    // path which requires you to calculate the distance afterwards
+    def searchFromWithDistances
+        ( start: N
+        , toF: (N => Boolean))
+        : NodeSet[N] with To[N] = {
+
+        val visited = collection.mutable.Map[N, Int]()
+        val toVisit = PriorityQueue[(Int, N)]()(Ordering.by(-_._1))
+
+        toVisit.enqueue((0, start))
+
+        while (toVisit.nonEmpty) {
+            val (distance, n) = toVisit.dequeue()
+
+            if (!visited.contains(n)) {
+                visited(n) = distance
+                if (toF(n))
+                    return new NodeSet[N] with To[N] {
+                        override def distances = visited.toMap
+                        override def to = Some(n, distance)
+                    }
+                else
+                    for (n_ <- get(n)) {
+                        val node = n_._1
+                        if (!visited.contains(node)) {
+                            val dist = n_._2
+                            val totalDistance = distance + dist
+                            toVisit.enqueue((totalDistance, node))
+                        }
+                    }
+            }
+        }
+
+        new NodeSet[N] with To[N] {
+            override def distances = visited.toMap
+            override def to = None
+        }
     }
 
     def getAllPaths(start: N): List[List[N]] = {
